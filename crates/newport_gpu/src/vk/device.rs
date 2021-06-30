@@ -250,9 +250,13 @@ impl Device {
         unsafe {
             let physical_devices = instance.instance.enumerate_physical_devices();
             if physical_devices.is_err() {
+                eprintln!("Error! Could not find a valid Physical Device!");
                 return Err(DeviceCreateError::NoValidPhysicalDevice);
             }
             let physical_devices = physical_devices.unwrap();
+
+            //Device selection
+            let mut device_map = HashMap::new();
 
             let mut selected_device = None;
             for it in physical_devices.iter() {
@@ -277,6 +281,7 @@ impl Device {
             }
 
             if selected_device.is_none() {
+                eprintln!("Error! Could not find a graphics device that is supported!");
                 return Err(DeviceCreateError::NoValidPhysicalDevice);
             }
 
